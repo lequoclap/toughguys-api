@@ -7,7 +7,7 @@ export default {
     {
       http: {
         method: 'post',
-        path: 'dashboard',
+        path: 'syncData',
         request: {
           schemas: {
             'application/json': schema,

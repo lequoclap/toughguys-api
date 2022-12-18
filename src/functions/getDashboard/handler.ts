@@ -25,14 +25,8 @@ const getDashboard: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (e
 
   // fetch all activities
 
-  // calculate
 
   const response = await getAthleteData('74721176');
-
-
-
-
-
 
 
   return formatJSONResponse({
