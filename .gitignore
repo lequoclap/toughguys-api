@@ -10,3 +10,4 @@ jspm_packages
 
 .env
 env.ts
+yarn-error.log

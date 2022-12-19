@@ -1,6 +1,7 @@
 import * as AWS from "aws-sdk";
 import axios from "axios";
 import { config } from "src/config";
+import { SportType } from "src/enum";
 
 
 export class stravaAPICaller {
@@ -14,7 +15,10 @@ export class stravaAPICaller {
 
 
     // refresh token
-    async refreshAccessToken(refreshToken: string): Promise<any> {
+    async getNewAccessToken(refreshToken: string): Promise<{
+        accessToken: string,
+        expiresAt: number,
+    }> {
         //
         const url = config.strava.host + '/athlete/activities';
 
@@ -26,9 +30,9 @@ export class stravaAPICaller {
         };
         try {
             const res = await axios.post(url, bodyParameters);
-            const items = res.data;
-            for (const item of items) {
-                console.log(`${item.user.id}: \t${item.title}`);
+            return {
+                accessToken: res.data.access_token,
+                expiresAt: res.data.expires_at
             }
         } catch (error) {
             const {
@@ -41,11 +45,15 @@ export class stravaAPICaller {
     }
 
     // get Athlete  
-    async getAthleteActivities(accessToken: string, from: string): Promise<any> {
+    async getAthleteActivities(accessToken: string, after: string): Promise<{
+        distance: number,
+        sportType: SportType,
+        id: string,
+    }[]> {
 
         //paging + from + to
 
-        const url = config.strava.host + '/athlete/activities?from=' + from;
+        const url = config.strava.host + '/athlete/activities?after=' + after;
         const axiosConfig = {
             headers: { Authorization: `Bearer ${accessToken}` }
         };
@@ -53,8 +61,15 @@ export class stravaAPICaller {
         try {
             const res = await axios.get(url, axiosConfig);
             const items = res.data;
+            const activities: any[] = [];
+
             for (const item of items) {
-                console.log(`${item.user.id}: \t${item.title}`);
+                activities.push({
+                    distance: item['distance'],
+                    sportType: item['sport_type'] as SportType,
+                    id: item['id']
+                })
+                return activities;
             }
         } catch (error) {
             const {
