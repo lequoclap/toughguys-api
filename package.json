@@ -15,7 +15,10 @@
   },
   "dependencies": {
     "@middy/core": "^3.4.0",
-    "@middy/http-json-body-parser": "^3.4.0"
+    "@middy/http-json-body-parser": "^3.4.0",
+    "@types/axios": "^0.14.0",
+    "axios": "^1.2.1",
+    "strava-v3": "^2.1.0"
   },
   "devDependencies": {
     "@serverless/typescript": "^3.0.0",
