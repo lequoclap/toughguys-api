@@ -12,14 +12,25 @@ const getDashboard: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (e
 
   // fetch all activities
 
+  try {
+    const res = await getAthleteData('74721176');
 
-  const response = await getAthleteData('74721176');
-
-
-  return formatJSONResponse({
-    message: response,
-    event,
-  });
-};
-
+    return formatJSONResponse(
+      {
+        status: 'success',
+        data:
+        {
+          athleteId: res.id,
+          athleteName: res.contents.athlete.name,
+          activities: res.contents.athlete.activities,
+        }
+      });
+  } catch {
+    return formatJSONResponse(
+      {
+        status: 'fail',
+        message: 'exeption'
+      })
+  }
+}
 export const main = middyfy(getDashboard);
