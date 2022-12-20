@@ -6,7 +6,7 @@ import 'source-map-support/register';
 
 import schema from './schema';
 
-const getDashboard: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (event) => {
+const getDashboard: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (_event) => {
 
   // fetch all id from id
 

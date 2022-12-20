@@ -33,7 +33,7 @@ const syncData: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (event
   //fetch new activities from Strava API
   const newActivities = await stravaAPICaller.getAthleteActivities(
     data.contents.athlete.accessToken,
-    Math.floor(Date.parse("") / 1000))
+    Math.floor(Date.parse(data.lastFetch) / 1000))
 
   console.log(newActivities);
   //ignore duplicated item and merge with  existing activities
