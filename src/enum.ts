@@ -10,6 +10,7 @@ export enum SportType {
     Run = 'Run',
     Ride = 'Ride',
     Swim = 'Swim',
+    Snowboard = 'Snowboard',
     // 'Skateboard',
     //  'AlpineSki',
     // 'BackcountrySki',
@@ -31,7 +32,7 @@ export enum SportType {
     // 'RollerSki',
     // 'Rowing',
     // 'Sail',
-    // 'Snowboard',
+
     // 'Snowshoe',
     // 'Soccer',
     // 'StairStepper',
