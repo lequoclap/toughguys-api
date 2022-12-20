@@ -21,6 +21,7 @@
     "@types/lodash": "^4.14.191",
     "axios": "^1.2.1",
     "lodash": "^4.17.21",
+    "moment": "^2.29.4",
     "source-map-support": "^0.5.21",
     "strava-v3": "^2.1.0"
   },
