@@ -2,7 +2,7 @@ import type { ValidatedEventAPIGatewayProxyEvent } from '@libs/api-gateway';
 import { formatJSONResponse } from '@libs/api-gateway';
 import { middyfy } from '@libs/lambda';
 import { getAthleteData } from 'src/services/dynamoService';
-// import 'source-map-support/register';
+import 'source-map-support/register';
 
 import schema from './schema';
 
@@ -17,7 +17,7 @@ const getDashboard: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (e
 
 
   return formatJSONResponse({
-    message: JSON.stringify(response),
+    message: response,
     event,
   });
 };
