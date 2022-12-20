@@ -50,36 +50,46 @@ export class StravaAPICaller {
 
         //paging + from + to
 
-        const url = config.strava.host + '/athlete/activities?after=' + after;
-        console.log(url)
-        const axiosConfig = {
-            headers: { Authorization: `Bearer ${accessToken}` }
-        };
+        const activities: Activity[] = [];
+        const perPage = 100;
+        let loopFlg = true;
+        let page = 1
 
-        try {
-            const res = await axios.get(url, axiosConfig);
-            const items = res.data;
+        while (page < 5 && loopFlg) {
 
-            // console.log("rawdata", res.data)
-            const activities: Activity[] = [];
+            const url = config.strava.host + '/athlete/activities'
+                + '?per_page=' + perPage
+                + '&after=' + after
+                + '&page=' + page;
+            page++;
+            console.log(url)
+            const axiosConfig = {
+                headers: { Authorization: `Bearer ${accessToken}` }
+            };
+            try {
+                const res = await axios.get(url, axiosConfig);
+                const items = res.data as [];
+                if (items.length < perPage) loopFlg = false;
+                for (const item of items) {
+                    activities.push({
+                        distance: item['distance'],
+                        sportType: item['sport_type'] as SportType,
+                        id: item['id'],
+                        startDate: item['start_date'],
+                        movingTime: item['moving_time']
+                    })
+                }
 
-            for (const item of items) {
-                activities.push({
-                    distance: item['distance'],
-                    sportType: item['sport_type'] as SportType,
-                    id: item['id'],
-                    startDate: item['start_date'],
-                    movingTime: item['moving_time']
-                })
+            } catch (error) {
+                const {
+                    status,
+                    statusText
+                } = error.response;
+                console.log(`Error! HTTP Status: ${status} ${statusText}`);
             }
-            return activities;
-        } catch (error) {
-            const {
-                status,
-                statusText
-            } = error.response;
-            console.log(`Error! HTTP Status: ${status} ${statusText}`);
         }
+        console.log(activities.length)
+        return activities;
     }
 
 
