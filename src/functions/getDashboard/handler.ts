@@ -6,14 +6,39 @@ import 'source-map-support/register';
 
 import schema from './schema';
 
+
+// from when?
+
 const getDashboard: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (_event) => {
+
+
+
 
   // fetch all id from id
 
-  // fetch all activities
 
+  // fetch all activities
   try {
     const res = await getAthleteData('74721176');
+
+    // grouping data
+
+    let activityMap = new Map<String, number>();
+
+    for (const activity of res.contents.athlete.activities) {
+      const distance = activity.distance + activityMap.get(activity.sportType) || 0;
+      activityMap.set(activity.sportType, distance);
+
+    }
+
+    let activities = [];
+    activityMap.forEach((v, k) => {
+      activities.push({
+        sportType: k,
+        distance: Math.round(v)
+      })
+    })
+
 
     return formatJSONResponse(
       {
@@ -22,7 +47,7 @@ const getDashboard: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (_
         {
           athleteId: res.id,
           athleteName: res.contents.athlete.name,
-          activities: res.contents.athlete.activities,
+          activities,
         }
       });
   } catch {
