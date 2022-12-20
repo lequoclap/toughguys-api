@@ -1,10 +1,11 @@
 import * as AWS from "aws-sdk";
 import axios from "axios";
 import { config } from "src/config";
+import { Activity } from "src/datatype/athleteData";
 import { SportType } from "src/enum";
 
 
-export class stravaAPICaller {
+export class StravaAPICaller {
 
     /**
  *constructor
@@ -15,13 +16,13 @@ export class stravaAPICaller {
 
 
     // refresh token
-    async getNewAccessToken(refreshToken: string): Promise<{
+    public async getNewAccessToken(refreshToken: string): Promise<{
         accessToken: string,
         expiresAt: number,
     }> {
         //
-        const url = config.strava.host + '/athlete/activities';
-
+        const url = config.strava.host + '/oauth/token';
+        console.log('URL here:' + url);
         const bodyParameters = {
             client_id: config.strava.clientId,
             client_secret: config.strava.clientSecret,
@@ -45,15 +46,12 @@ export class stravaAPICaller {
     }
 
     // get Athlete  
-    async getAthleteActivities(accessToken: string, after: string): Promise<{
-        distance: number,
-        sportType: SportType,
-        id: string,
-    }[]> {
+    async getAthleteActivities(accessToken: string, after: number): Promise<Activity[]> {
 
         //paging + from + to
 
         const url = config.strava.host + '/athlete/activities?after=' + after;
+        console.log(url)
         const axiosConfig = {
             headers: { Authorization: `Bearer ${accessToken}` }
         };
@@ -61,16 +59,20 @@ export class stravaAPICaller {
         try {
             const res = await axios.get(url, axiosConfig);
             const items = res.data;
-            const activities: any[] = [];
+
+            // console.log("rawdata", res.data)
+            const activities: Activity[] = [];
 
             for (const item of items) {
                 activities.push({
                     distance: item['distance'],
                     sportType: item['sport_type'] as SportType,
-                    id: item['id']
+                    id: item['id'],
+                    startDate: item['start_date'],
+                    movingTime: item['moving_time']
                 })
-                return activities;
             }
+            return activities;
         } catch (error) {
             const {
                 status,

@@ -2,6 +2,7 @@ import type { ValidatedEventAPIGatewayProxyEvent } from '@libs/api-gateway';
 import { formatJSONResponse } from '@libs/api-gateway';
 import { middyfy } from '@libs/lambda';
 import { getAthleteData } from 'src/services/dynamoService';
+// import 'source-map-support/register';
 
 import schema from './schema';
 

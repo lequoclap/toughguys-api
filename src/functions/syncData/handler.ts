@@ -1,23 +1,55 @@
 import type { ValidatedEventAPIGatewayProxyEvent } from '@libs/api-gateway';
 import { formatJSONResponse } from '@libs/api-gateway';
 import { middyfy } from '@libs/lambda';
-import { getAthleteData } from 'src/services/dynamoService';
+import { createOrUpdateStravaData, getAthleteData } from 'src/services/dynamoService';
+import { StravaAPICaller } from 'src/services/stravaAPICaller';
+
+import * as _ from 'lodash';
 
 import schema from './schema';
 
 const syncData: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (event) => {
 
-  // fetch all id from id
+  let response: any = "";
 
-  // fetch all activities from Strava API
+  // fetch all id from dynamoDB
 
-  // compare with  add new activities
+  const data = await getAthleteData('74721176');
+  if (!data) response = null
+  let activities = data.contents.athlete.activities;
+
+  // Strava
+  const stravaAPICaller = new StravaAPICaller();
+
+  // refresh token if it is needed
+
+  if (new Date() > new Date(data.contents.athlete.expiresAt)) {
+    const res = await stravaAPICaller.getNewAccessToken(data.contents.athlete.refreshToken);
+    data.contents.athlete.accessToken = res.accessToken;
+    data.contents.athlete.expiresAt = new Date(res.expiresAt * 1000).toLocaleString();
+  }
 
 
+  //fetch new activities from Strava API
+  const newActivities = await stravaAPICaller.getAthleteActivities(
+    data.contents.athlete.accessToken,
+    Math.floor(Date.parse("") / 1000))
 
+  console.log(newActivities);
+  //ignore duplicated item and merge with  existing activities
+  const activitieIds = activities.map(x => {
+    return x.id
+  })
+  for (const activity of newActivities) {
+    if (!activitieIds.includes(activity.id)) {
+      activities.push(activity)
+    }
+  }
+  data.contents.athlete.activities = activities;
 
-  const response = await getAthleteData('74721176');
+  // update back to DynamoDB
 
+  response = await createOrUpdateStravaData('74721176', data.contents);
 
 
   return formatJSONResponse({
@@ -27,3 +59,4 @@ const syncData: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (event
 };
 
 export const main = middyfy(syncData);
+

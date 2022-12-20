@@ -23,7 +23,9 @@ export async function getAthleteData(athleteId: string): Promise<StravaData> {
     const documentClient = await getDynamoDocumentClient();
     const params = {
         TableName: config.dyanmodb.tableName,
-        Key: { id: athleteId }
+        Key: {
+            id: athleteId
+        }
     };
     return new Promise((resolve, reject) => {
         documentClient.get(params, (err, data) => {
@@ -33,13 +35,14 @@ export async function getAthleteData(athleteId: string): Promise<StravaData> {
     })
         .then((data: DynamoDB.DocumentClient.GetItemOutput) => {
             const athleteData = data.Item as StravaData;
+            console.log(data)
             if (athleteData) {
-
                 return athleteData;
             }
             return null;
         })
         .catch((err) => {
+            console.error(params);
             console.error('Unable to get session', err);
             return null;
         });
@@ -53,13 +56,11 @@ export async function getAthleteData(athleteId: string): Promise<StravaData> {
 export async function createOrUpdateStravaData(athleteId: string, contents: StravaDataContents): Promise<boolean> {
     const documentClient = await getDynamoDocumentClient();
 
-    // const stravaData = await getAthleteData(sessionId);
-
     const params = {
         TableName: config.dyanmodb.tableName,
         Item: {
             id: athleteId,
-            name: contents.athlete.name,
+            lastFetch: new Date().toLocaleString(),
             contents: contents
         }
     };

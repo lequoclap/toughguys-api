@@ -1,3 +1,5 @@
+import { SportType } from "src/enum";
+
 export declare interface Athelete {
     id: string,
     name: string,
@@ -5,13 +7,15 @@ export declare interface Athelete {
     activities: Activity[],
     accessToken: string,
     refreshToken: string,
+    expiresAt: string,
 
 }
 
 
 export declare interface Activity {
     id: string,
-    start: number,
-    end: number,
-    distance: number
+    startDate: string,
+    movingTime: number,
+    distance: number,
+    sportType: SportType
 }
