@@ -25,7 +25,7 @@ const serverlessConfiguration: AWS = {
         Effect: "Allow",
         Action: ["dynamodb:PutItem", "dynamodb:GetItem"],
         Resource:
-          "arn:aws:dynamodb:${opt:region, self:provider.region}:*:table/stravaDataTable",
+          "arn:aws:dynamodb:${opt:region, self:provider.region}:*:table/" + env.DYNAMO_DB_TABLE,
       },
     ],
     environment: env,
@@ -54,6 +54,7 @@ const serverlessConfiguration: AWS = {
       platform: 'node',
       concurrency: 10,
     },
+    useChildProcesses: true // ホットリロードの設定をする。←追加する。
   },
 };
 

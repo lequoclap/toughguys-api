@@ -1,29 +1,22 @@
+import { env } from '../env'
 export const dynamoDBResouce = {
   Resources: {
     // ResourceとしてDynamoDBを設定
-    stravaDataTable: {
+    ToughGuysTable: {
       Type: "AWS::DynamoDB::Table",
       Properties: {
-        TableName: "stravaDataTable",
+        TableName: env.DYNAMO_DB_TABLE,
         AttributeDefinitions: [
           {
             AttributeName: "id",
             AttributeType: "S",
-          },
-          {
-            AttributeName: "name",
-            AttributeType: "S",
-          },
+          }
         ],
         KeySchema: [
           {
             KeyType: "HASH",
             AttributeName: "id",
-          },
-          {
-            KeyType: "RANGE",
-            AttributeName: "name",
-          },
+          }
         ],
         ProvisionedThroughput: {
           ReadCapacityUnits: 5,
