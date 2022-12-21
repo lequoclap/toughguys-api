@@ -1,6 +1,6 @@
 export enum ResponseStatus {
-    Success = 'OK',
-    Fail = 'Fail'
+    Success = 'success',
+    Fail = 'fail'
 }
 
 

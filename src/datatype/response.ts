@@ -1,9 +1,7 @@
 import { ResponseStatus, SportType } from "src/enum";
 
 export declare interface GetDashboardResponse {
-
-    code: number,
-    success: ResponseStatus,
+    status: ResponseStatus,
     data:
     {
         athlete: {
@@ -13,7 +11,7 @@ export declare interface GetDashboardResponse {
         activities: {
             id: string,
             distance: number,
-            type: SportType
+            sportType: SportType
         }[],
     }[]
 }

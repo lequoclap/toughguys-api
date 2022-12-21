@@ -35,7 +35,6 @@ export async function getAthleteData(athleteId: string): Promise<StravaData> {
     })
         .then((data: DynamoDB.DocumentClient.GetItemOutput) => {
             const athleteData = data.Item as StravaData;
-            console.log(data)
             if (athleteData) {
                 return athleteData;
             }
@@ -80,32 +79,29 @@ export async function createOrUpdateStravaData(athleteId: string, contents: Stra
         });
 }
 
-/**
- *
- * @param sessionId
- */
-export async function deleteSession(sessionId: string): Promise<boolean> {
 
+/**
+ * 
+ * @returns 
+ */
+
+export async function fetchAllData(): Promise<StravaData[]> {
     const documentClient = await getDynamoDocumentClient();
     const params = {
-        TableName: config.dyanmodb.tableName,
-        Key: {
-            id: sessionId
-        }
+        TableName: config.dyanmodb.tableName
     };
 
     return new Promise((resolve, reject) => {
-        documentClient.delete(params, (err, data) => {
+        documentClient.scan(params, (err, data) => {
             if (err) return reject(err);
-            resolve(data);
+            resolve(data.Items);
         });
     })
         .then((data) => {
-            console.debug('delete session:', JSON.stringify(data, null, 2));
-            return true;
+            return data as StravaData[];
         })
         .catch((err) => {
-            console.error('Unable to delete session', err);
-            return false;
+            console.error('Unable to fetch all data', err);
+            return [];
         });
 }
