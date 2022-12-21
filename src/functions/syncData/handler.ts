@@ -15,7 +15,28 @@ const syncData: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (event
   // fetch all id from dynamoDB
 
   const data = await getAthleteData('74721176');
-  if (!data) response = null
+
+
+  // validation
+  if (!data) return formatJSONResponse({
+    status: "fail",
+    message: "Data not found"
+  });
+
+
+  // if (moment.duration(moment().diff(moment(data.lastFetch))).asMinutes() < 5) {
+  if ((Date.parse(new Date().toLocaleString()) - Date.parse(data.lastFetch)) < 5 * 1000 * 60) {
+
+    return formatJSONResponse({
+      status: "fail",
+      message: "Data is already up to date ",
+      gap: (Date.parse(new Date().toLocaleString()) - Date.parse(data.lastFetch)),
+      currentTime: new Date().toLocaleString(),
+      lastFetch: data.lastFetch
+    });
+  }
+
+
   let activities = data.contents.athlete.activities;
 
   // Strava
@@ -35,7 +56,6 @@ const syncData: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (event
     data.contents.athlete.accessToken,
     Math.floor(Date.parse(data.lastFetch) / 1000))
 
-  console.log(newActivities);
   //ignore duplicated item and merge with  existing activities
   const activitieIds = activities.map(x => {
     return x.id
@@ -50,7 +70,6 @@ const syncData: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (event
   // update back to DynamoDB
 
   response = await createOrUpdateStravaData('74721176', data.contents);
-
 
   return formatJSONResponse({
     message: JSON.stringify(response),
