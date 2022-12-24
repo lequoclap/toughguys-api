@@ -2,6 +2,7 @@ import type { AWS } from '@serverless/typescript';
 // import hello from '@functions/hello';
 import getDashboard from '@functions/getDashboard';
 import syncData from '@functions/syncData';
+import generateToken from '@functions/generateToken';
 import { dynamoDBResouce } from './resources/dynamodb';
 import { env } from './env';
 
@@ -38,7 +39,8 @@ const serverlessConfiguration: AWS = {
   // import the function via paths
   functions: {
     getDashboard,
-    syncData
+    syncData,
+    generateToken
   },
 
 
