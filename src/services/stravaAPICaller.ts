@@ -16,7 +16,7 @@ export class StravaAPICaller {
 
 
     // refresh token
-    public async getNewAccessToken(refreshToken: string): Promise<{
+    public async refreshAccessToken(refreshToken: string): Promise<{
         accessToken: string,
         expiresAt: number,
     }> {
@@ -32,6 +32,38 @@ export class StravaAPICaller {
         try {
             const res = await axios.post(url, bodyParameters);
             return {
+                accessToken: res.data.access_token,
+                expiresAt: res.data.expires_at
+            }
+        } catch (error) {
+            const {
+                status,
+                statusText
+            } = error.response;
+            console.log(`Error! HTTP Status: ${status} ${statusText}`);
+        }
+
+    }
+
+    // refresh token
+    public async generateTokenFromCode(code: string): Promise<{
+        refreshToken: string,
+        accessToken: string,
+        expiresAt: number,
+    }> {
+        //
+        const url = config.strava.host + '/oauth/token';
+        console.log('URL here:' + url);
+        const bodyParameters = {
+            client_id: config.strava.clientId,
+            client_secret: config.strava.clientSecret,
+            grant_type: 'authorization_code',
+            code: code
+        };
+        try {
+            const res = await axios.post(url, bodyParameters);
+            return {
+                refreshToken: res.data.refresh_token,
                 accessToken: res.data.access_token,
                 expiresAt: res.data.expires_at
             }

@@ -11,6 +11,9 @@ export declare interface StravaData {
 
 export declare interface StravaDataContents {
     athlete: Athelete;
+    accessToken: string,
+    refreshToken: string,
+    expiresAt: string,
 }
 
 export declare interface SportWeight {

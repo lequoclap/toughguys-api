@@ -5,10 +5,6 @@ export declare interface Athelete {
     name: string,
     imgURL: string,
     activities: Activity[],
-    accessToken: string,
-    refreshToken: string,
-    expiresAt: string,
-
 }
 
 

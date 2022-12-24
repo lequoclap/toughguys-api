@@ -17,7 +17,7 @@ const getDashboard: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (e
   try {
     const allAthleteData = await fetchAllData();
 
-    let data = [];
+    let outputData = [];
 
     for (const ath of allAthleteData) {
 
@@ -42,7 +42,7 @@ const getDashboard: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (e
         })
       })
 
-      data.push({
+      outputData.push({
         athlete: {
           id: ath.id,
           name: ath.contents.athlete.name
@@ -54,7 +54,7 @@ const getDashboard: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (e
     return formatJSONResponse(
       {
         status: 'success',
-        data
+        data: outputData
       });
   } catch {
     return formatErrorResponse(500, "Exception")

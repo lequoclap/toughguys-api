@@ -36,16 +36,16 @@ const syncData: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (event
 
     // refresh token if it is needed
 
-    if (new Date() > new Date(data.contents.athlete.expiresAt)) {
-      const res = await stravaAPICaller.getNewAccessToken(data.contents.athlete.refreshToken);
-      data.contents.athlete.accessToken = res.accessToken;
-      data.contents.athlete.expiresAt = new Date(res.expiresAt * 1000).toLocaleString();
+    if (new Date() > new Date(data.contents.expiresAt)) {
+      const res = await stravaAPICaller.refreshAccessToken(data.contents.refreshToken);
+      data.contents.accessToken = res.accessToken;
+      data.contents.expiresAt = new Date(res.expiresAt * 1000).toLocaleString();
     }
 
 
     //fetch new activities from Strava API
     const newActivities = await stravaAPICaller.getAthleteActivities(
-      data.contents.athlete.accessToken,
+      data.contents.accessToken,
       Math.floor(Date.parse(data.lastFetch) / 1000))
 
     //ignore duplicated item and merge with  existing activities
