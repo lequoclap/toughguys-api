@@ -42,3 +42,96 @@ DynamoDB's structure
 }
 
 ```
+
+
+
+## API
+
+### Generate token (register)
+
+> Get accessToken and athlete id by Strava authentication code
+
+```
+endpoint: POST /generateToken
+
+request:
+{
+    code: '123se23d213rf343f121341r3df'
+}
+
+response: 
+{
+    "status": "success",
+    "data": {
+        "athleteId": "12324123",
+        "token": "97f5fb168437a0474f2ce777d3f0680f39043de6"
+    }
+}
+
+```
+
+### Sync data
+
+> Fetch new data from Strava
+
+```
+endpoint: POST /syncData
+
+headers:
+
+Authorization: Bearer {{id}}.{{token}}
+
+ex) Authorization: "1231231.97f5fb168437a0474f2ce777d3f0680f39043de6"
+
+request: {}
+
+response: 
+{
+    "message": "Data has been synced"
+}
+```
+
+### Get Dashboard Data
+
+```
+endpoint: POST /dashboard
+
+headers:
+
+Authorization: Bearer {{id}}.{{token}}
+
+ex) Authorization: "1231231.97f5fb168437a0474f2ce777d3f0680f39043de6"
+
+request:
+{
+    from: "2022-10-11"
+}
+
+response: 
+{
+    "status": "success",
+    "data": [
+        {
+            "athlete": {
+                "id": "74221241",
+                "name": "Lập Lê"
+            },
+            "activities": [
+                {
+                    "sportType": "Ride",
+                    "distance": 11762
+                },
+                {
+                    "sportType": "Run",
+                    "distance": 37030
+                },
+                {
+                    "sportType": "Walk",
+                    "distance": 1609
+                }
+            ]
+        }
+    ]
+}
+
+```
