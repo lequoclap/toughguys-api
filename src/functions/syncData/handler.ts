@@ -7,6 +7,7 @@ import { StravaAPICaller } from 'src/services/stravaAPICaller';
 import * as _ from 'lodash';
 
 import schema from './schema';
+import { ResponseStatus } from 'src/enum';
 
 const syncData: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (_event) => {
 
@@ -20,7 +21,7 @@ const syncData: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (_even
     if ((Date.parse(new Date().toLocaleString()) - Date.parse(data.lastFetch)) < 5 * 1000 * 60) {
 
       return formatJSONResponse({
-        status: "success",
+        status: ResponseStatus.Fail,
         message: "Data is already up to date ",
         gap: (Date.parse(new Date().toLocaleString()) - Date.parse(data.lastFetch)) / 1000 + 'seconds',
         currentTime: new Date().toLocaleString(),

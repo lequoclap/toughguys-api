@@ -61,6 +61,8 @@ export class StravaAPICaller {
             grant_type: 'authorization_code',
             code: code
         };
+
+        console.debug(bodyParameters)
         try {
             const res = await axios.post(url, bodyParameters);
             return {

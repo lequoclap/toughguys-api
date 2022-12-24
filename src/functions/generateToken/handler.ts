@@ -19,6 +19,7 @@ const generateToken: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (
   try {
     const stravaAPICaller = new StravaAPICaller();
     const token = await stravaAPICaller.generateTokenFromCode(req.code);
+    console.debug(token);
     const athlete = await stravaAPICaller.getAthlete(token.accessToken);
 
     // update back to DB
@@ -26,7 +27,7 @@ const generateToken: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (
 
     const athleteRecord = await getAthleteData(athlete.id);
 
-    console.log("atheleteRecord", athleteRecord);
+    console.debug("atheleteRecord", athleteRecord);
     // if the record exists
     if (athleteRecord) {
       stravaData = athleteRecord.contents;
@@ -54,7 +55,7 @@ const generateToken: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (
         }
       });
   } catch {
-    return formatErrorResponse(500, "Exception")
+    return formatErrorResponse(500, 'Internal Error')
   }
 }
 export const main = middyfy(generateToken);
