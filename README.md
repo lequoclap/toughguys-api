@@ -93,6 +93,8 @@ response:
 
 ### Get Dashboard Data
 
+> Get newest dashboard data
+
 ```
 endpoint: POST /dashboard
 
