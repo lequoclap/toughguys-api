@@ -40,7 +40,11 @@ const serverlessConfiguration: AWS = {
   functions: {
     getDashboard,
     syncData,
-    generateToken
+    generateToken,
+    customAuthorizer: {
+      handler: "src/functions/authorizer/handler.customAuthorizer"
+    }
+
   },
 
 
