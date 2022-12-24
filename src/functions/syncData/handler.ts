@@ -8,7 +8,7 @@ import * as _ from 'lodash';
 
 import schema from './schema';
 
-const syncData: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (event) => {
+const syncData: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (_event) => {
 
   // fetch all id from dynamoDB
 
@@ -39,14 +39,14 @@ const syncData: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (event
     if (new Date() > new Date(data.contents.expiresAt)) {
       const res = await stravaAPICaller.refreshAccessToken(data.contents.refreshToken);
       data.contents.accessToken = res.accessToken;
-      data.contents.expiresAt = new Date(res.expiresAt * 1000).toLocaleString();
+      data.contents.expiresAt = res.expiresAt;
     }
 
 
     //fetch new activities from Strava API
     const newActivities = await stravaAPICaller.getAthleteActivities(
       data.contents.accessToken,
-      Math.floor(Date.parse(data.lastFetch) / 1000))
+      Math.floor(Date.parse(data.lastFetch) || 0 / 1000))
 
     //ignore duplicated item and merge with  existing activities
     const activitieIds = activities.map(x => {
@@ -60,8 +60,7 @@ const syncData: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (event
     data.contents.athlete.activities = activities;
 
     // update back to DynamoDB
-
-    await createOrUpdateStravaData(data.id, data.contents);
+    await createOrUpdateStravaData(data.id, data.contents, true);
 
   }
 
