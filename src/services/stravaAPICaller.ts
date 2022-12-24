@@ -1,7 +1,7 @@
 import * as AWS from "aws-sdk";
 import axios from "axios";
 import { config } from "src/config";
-import { Activity } from "src/datatype/athleteData";
+import { Activity, Athelete } from "src/datatype/athleteData";
 import { SportType } from "src/enum";
 
 
@@ -18,7 +18,7 @@ export class StravaAPICaller {
     // refresh token
     public async refreshAccessToken(refreshToken: string): Promise<{
         accessToken: string,
-        expiresAt: number,
+        expiresAt: string,
     }> {
         //
         const url = config.strava.host + '/oauth/token';
@@ -33,7 +33,7 @@ export class StravaAPICaller {
             const res = await axios.post(url, bodyParameters);
             return {
                 accessToken: res.data.access_token,
-                expiresAt: res.data.expires_at
+                expiresAt: new Date(res.data.expires_at * 1000).toLocaleString()
             }
         } catch (error) {
             const {
@@ -44,16 +44,17 @@ export class StravaAPICaller {
         }
 
     }
-
-    // refresh token
+    /**
+     *  generate token from Code
+     * @param code 
+     * @returns 
+     */
     public async generateTokenFromCode(code: string): Promise<{
         refreshToken: string,
         accessToken: string,
-        expiresAt: number,
+        expiresAt: string,
     }> {
-        //
         const url = config.strava.host + '/oauth/token';
-        console.log('URL here:' + url);
         const bodyParameters = {
             client_id: config.strava.clientId,
             client_secret: config.strava.clientSecret,
@@ -65,7 +66,7 @@ export class StravaAPICaller {
             return {
                 refreshToken: res.data.refresh_token,
                 accessToken: res.data.access_token,
-                expiresAt: res.data.expires_at
+                expiresAt: new Date(res.data.expires_at * 1000).toLocaleString()
             }
         } catch (error) {
             const {
@@ -77,7 +78,31 @@ export class StravaAPICaller {
 
     }
 
-    // get Athlete  
+    // get Athlete Activities
+    async getAthlete(accessToken: string,): Promise<Athelete> {
+        const url = config.strava.host + '/athlete';
+        const axiosConfig = {
+            headers: { Authorization: `Bearer ${accessToken}` }
+        };
+        try {
+            const res = await axios.get(url, axiosConfig);
+            return {
+                id: res.data.id + '',
+                name: res.data.firstname + " " + res.data.lastname,
+                imgURL: res.data.profile_medium,
+                activities: []
+            }
+
+        } catch (error) {
+            const {
+                status,
+                statusText
+            } = error.response;
+            console.log(`Error! HTTP Status: ${status} ${statusText}`);
+        }
+    }
+
+    // get Athlete Activities
     async getAthleteActivities(accessToken: string, after: number): Promise<Activity[]> {
 
         //paging + from + to
