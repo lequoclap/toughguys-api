@@ -45,7 +45,8 @@ const getDashboard: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (e
       outputData.push({
         athlete: {
           id: ath.id,
-          name: ath.contents.athlete.name
+          name: ath.contents.athlete.name,
+          imgURL: ath.contents.athlete.imgURL
         },
         activities
       })
