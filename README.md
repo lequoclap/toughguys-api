@@ -13,7 +13,7 @@ DynamoDB's structure
     contents: {
             accessToken: "23qwd13142f3423rwer23523r23423r23r",
             refreshToken: "23qwd13142f3423rwer23523r23423r23rasdasq3423",
-            expiresAt: string,
+            expiresAt: "2022-11-11 12:12:12",
             athlete: {
                     id: "1234321",
                     name: "Jones",
@@ -54,11 +54,15 @@ DynamoDB's structure
 ```
 endpoint: POST /generateToken
 
+```
+```
 request:
 {
     code: '123se23d213rf343f121341r3df'
 }
 
+```
+```
 response: 
 {
     "status": "success",
@@ -77,14 +81,19 @@ response:
 ```
 endpoint: POST /syncData
 
+```
+```
 headers:
 
 Authorization: Bearer {{id}}.{{token}}
 
 ex) Authorization: "1231231.97f5fb168437a0474f2ce777d3f0680f39043de6"
 
-request: {}
-
+```
+```
+request:{ }
+```
+```
 response: 
 {
     "message": "Data has been synced"
@@ -98,17 +107,25 @@ response:
 ```
 endpoint: POST /dashboard
 
+```
+
+```
 headers:
 
 Authorization: Bearer {{id}}.{{token}}
 
 ex) Authorization: "1231231.97f5fb168437a0474f2ce777d3f0680f39043de6"
 
+```
+
+```
 request:
 {
     from: "2022-10-11"
 }
 
+```
+```
 response: 
 {
     "status": "success",
