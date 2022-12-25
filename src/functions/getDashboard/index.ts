@@ -16,6 +16,7 @@ export default {
         authorizer: {
           name: 'customAuthorizer'
         },
+        cors: true,
       },
     },
   ],

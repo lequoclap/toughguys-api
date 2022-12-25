@@ -58,7 +58,7 @@ const getDashboard: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (e
         data: outputData
       });
   } catch {
-    return formatErrorResponse(500, "Exception")
+    return formatErrorResponse(500, "Internal Error")
   }
 }
 export const main = middyfy(getDashboard);

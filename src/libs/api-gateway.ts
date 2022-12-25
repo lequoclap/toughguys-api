@@ -17,10 +17,9 @@ export const formatJSONResponse = (response: Record<string, unknown>) => {
   //   res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
   // }
 
-
   const headers = {
     'Access-Control-Allow-Origin': '*', // Required for CORS support to work
-    // 'Access-Control-Allow-Credentials': true, // Required for cookies, authorization headers with HTTPS,
+    'Access-Control-Allow-Credentials': false, // Required for cookies, authorization headers with HTTPS,
     'Access-Control-Allow-Headers': '*'
   };
 
@@ -34,7 +33,7 @@ export const formatJSONResponse = (response: Record<string, unknown>) => {
 export const formatErrorResponse = (statusCode: number, message: string) => {
   const headers = {
     'Access-Control-Allow-Origin': '*', // Required for CORS support to work
-    // 'Access-Control-Allow-Credentials': true, // Required for cookies, authorization headers with HTTPS,
+    'Access-Control-Allow-Credentials': false, // Required for cookies, authorization headers with HTTPS,
     'Access-Control-Allow-Headers': '*'
   };
   return {

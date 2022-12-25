@@ -4,6 +4,7 @@ import getDashboard from '@functions/getDashboard';
 import syncData from '@functions/syncData';
 import generateToken from '@functions/generateToken';
 import { dynamoDBResouce } from './resources/dynamodb';
+import { APIGWResource } from './resources/api-gw';
 import { env } from './env';
 
 const serverlessConfiguration: AWS = {
@@ -15,6 +16,7 @@ const serverlessConfiguration: AWS = {
   provider: {
     name: 'aws',
     runtime: 'nodejs14.x',
+    timeout: 600,
     region: "ap-northeast-1",
     stage: "${opt:stage, 'dev'}",
     apiGateway: {
@@ -24,7 +26,7 @@ const serverlessConfiguration: AWS = {
     iamRoleStatements: [
       {
         Effect: "Allow",
-        Action: ["dynamodb:PutItem", "dynamodb:GetItem"],
+        Action: ["dynamodb:PutItem", "dynamodb:GetItem", "dynamodb:Scan"],
         Resource:
           "arn:aws:dynamodb:${opt:region, self:provider.region}:*:table/" + env.DYNAMO_DB_TABLE,
       },
@@ -34,7 +36,10 @@ const serverlessConfiguration: AWS = {
   },
   // external resources
   resources: {
-    Resources: dynamoDBResouce.Resources
+    Resources: {
+      dynamoDB: dynamoDBResouce.Resources.ToughGuysTable,
+      apigw: APIGWResource
+    }
   },
   // import the function via paths
   functions: {
@@ -44,7 +49,6 @@ const serverlessConfiguration: AWS = {
     customAuthorizer: {
       handler: "src/functions/authorizer/handler.customAuthorizer"
     }
-
   },
 
 
