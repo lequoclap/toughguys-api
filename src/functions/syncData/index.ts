@@ -16,7 +16,9 @@ export default {
         authorizer: {
           name: 'customAuthorizer'
         },
-      },
+        cors: true
+      }
     },
   ],
+  timeout: 150 // 2.5minutes
 };

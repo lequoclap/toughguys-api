@@ -11,12 +11,10 @@ const serverlessConfiguration: AWS = {
   service: 'toughguys-api',
   frameworkVersion: '3',
   plugins: ['serverless-esbuild', 'serverless-offline'],
-  //'serverless-webpack'
-  // custom: deployEnv,
   provider: {
     name: 'aws',
     runtime: 'nodejs14.x',
-    timeout: 600,
+    // timeout: 600,
     region: "ap-northeast-1",
     stage: "${opt:stage, 'dev'}",
     apiGateway: {
