@@ -2,9 +2,21 @@
 
 The API only for tough guys. j/k
 
-Just a tool to fetch data from Strava and customize as I want.
+Just a tool to fetch data from Strava and customize.
 
-DynamoDB's structure
+
+
+## How to run in local
+
+
+- install aws-cli, update credentials
+- clone `env.ts.sample` to `env.ts`, update application information
+- `npm install` or `yarn install`
+- `npm run start`
+- APIs will be run in http://localhost:3000 by default
+
+
+## DynamoDB's structure
 
 ```
 {

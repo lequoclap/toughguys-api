@@ -8,7 +8,7 @@
     "deploy": "sls deploy",
     "dev": "SET SLS_DEBUG=* &&  sls offline",
     "watch": "webpack --watch",
-    "hotload": "sls offline start --reloadHandler",
+    "start": "sls offline start --reloadHandler",
     "debug": "SET SLS_DEBUG=* && node --inspect node_modules\\serverless\\bin\\serverless offline"
   },
   "engines": {
