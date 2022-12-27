@@ -24,12 +24,13 @@ const generateToken: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (
 
     // update back to DB
     let stravaData: StravaDataContents;
-
+    let lastFetch: string = '';
     const athleteRecord = await getAthleteData(athlete.id);
 
     console.debug("athleteRecord", athleteRecord);
     // if the record exists
     if (athleteRecord) {
+      lastFetch = athleteRecord.lastFetch;
       stravaData = athleteRecord.contents;
       stravaData.athlete.imgURL = athlete.imgURL;
       stravaData.athlete.name = athlete.name;
@@ -47,7 +48,7 @@ const generateToken: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (
       }
     }
 
-    await createOrUpdateStravaData(athlete.id, stravaData);
+    await createOrUpdateStravaData(athlete.id, stravaData, lastFetch);
 
     return formatJSONResponse(
       {

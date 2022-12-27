@@ -52,20 +52,18 @@ export async function getAthleteData(athleteId: string): Promise<StravaData> {
  * @param athleteId
  * @param contents
  */
-export async function createOrUpdateStravaData(athleteId: string, contents: StravaDataContents, isFetching = false): Promise<boolean> {
+export async function createOrUpdateStravaData(athleteId: string, contents: StravaDataContents, lastFetch: string): Promise<boolean> {
     const documentClient = await getDynamoDocumentClient();
 
     const params = {
         TableName: config.dyanmodb.tableName,
         Item: {
             id: athleteId,
-            contents: contents
+            contents: contents,
+            lastFetch
         }
     };
 
-    if (isFetching) {
-        params.Item['lastFetch'] = new Date().toLocaleString()
-    }
 
     return new Promise((resolve, reject) => {
         documentClient.put(params, (err, data) => {

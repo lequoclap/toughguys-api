@@ -63,8 +63,7 @@ const syncData: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (_even
       data.contents.athlete.activities = activities;
 
       // update back to DynamoDB
-      await createOrUpdateStravaData(data.id, data.contents, true);
-
+      await createOrUpdateStravaData(data.id, data.contents, new Date().toLocaleString());
     }
 
     return formatJSONResponse({
