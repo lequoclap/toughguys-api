@@ -5,6 +5,7 @@ import { fetchAllData } from 'src/services/dynamoService';
 import 'source-map-support/register';
 
 import schema from './schema';
+import dayjs from 'dayjs';
 
 
 // get list of athletes with their summary of activities from particular time
@@ -24,6 +25,7 @@ const getDashboard: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (e
       // grouping data
 
       let activityMap = new Map<String, number>();
+      let newActivityMap = new Map<String, number>();
 
       const rawActivities = ath.contents.athlete.activities.filter((v) => {
         return new Date(v.startDate) >= new Date(req.from)
@@ -32,13 +34,20 @@ const getDashboard: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (e
       for (const activity of rawActivities) {
         const distance = activity.distance + (activityMap.get(activity.sportType) || 0);
         activityMap.set(activity.sportType, distance);
+
+        // if the activities are at the same day then treat it as new activities
+        if (dayjs().isSame(activity.startDate, 'date')) {
+          const newDistance = activity.distance + (newActivityMap.get(activity.sportType) || 0);
+          newActivityMap.set(activity.sportType, newDistance)
+        }
       }
 
       let activities = [];
       activityMap.forEach((v, k) => {
         activities.push({
           sportType: k,
-          distance: Math.round(v)
+          distance: Math.round(v),
+          newDistance: Math.round(newActivityMap.get(k) || 0)
         })
       })
 

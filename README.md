@@ -150,15 +150,18 @@ response:
             "activities": [
                 {
                     "sportType": "Ride",
-                    "distance": 11762
+                    "distance": 11762,
+                    "newDistance": 0
                 },
                 {
                     "sportType": "Run",
-                    "distance": 37030
+                    "distance": 37030,
+                    "newDistance": 7000
                 },
                 {
                     "sportType": "Walk",
-                    "distance": 1609
+                    "distance": 1609,
+                    "newDistance": 0
                 }
             ]
         }
