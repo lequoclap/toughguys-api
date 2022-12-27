@@ -27,10 +27,13 @@ const generateToken: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (
 
     const athleteRecord = await getAthleteData(athlete.id);
 
-    console.debug("atheleteRecord", athleteRecord);
+    console.debug("athleteRecord", athleteRecord);
     // if the record exists
     if (athleteRecord) {
       stravaData = athleteRecord.contents;
+      stravaData.athlete.imgURL = athlete.imgURL;
+      stravaData.athlete.name = athlete.name;
+
       stravaData.accessToken = token.accessToken;
       stravaData.expiresAt = token.expiresAt;
       stravaData.refreshToken = token.refreshToken;
