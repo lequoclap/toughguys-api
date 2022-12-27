@@ -91,7 +91,7 @@ export class StravaAPICaller {
             return {
                 id: res.data.id + '',
                 name: res.data.firstname + " " + res.data.lastname,
-                imgURL: res.data.profile_medium,
+                imgURL: res.data.profile,
                 activities: []
             }
 
