@@ -35,8 +35,8 @@ const getDashboard: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (e
         const distance = activity.distance + (activityMap.get(activity.sportType) || 0);
         activityMap.set(activity.sportType, distance);
 
-        // if the activities are at the same day then treat it as new activities
-        if (dayjs().isSame(activity.startDate, 'date')) {
+        // if the activity is started within 24 hours then treat it as a new activity
+        if (dayjs().diff(activity.startDate, 'hour') < 24) {
           const newDistance = activity.distance + (newActivityMap.get(activity.sportType) || 0);
           newActivityMap.set(activity.sportType, newDistance)
         }
