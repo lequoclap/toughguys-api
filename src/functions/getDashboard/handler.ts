@@ -28,7 +28,7 @@ const getDashboard: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (e
       let newActivityMap = new Map<String, number>();
 
       const rawActivities = ath.contents.athlete.activities.filter((v) => {
-        return new Date(v.startDate) >= new Date(req.from)
+        return (new Date(v.startDate) >= new Date(req.from) && new Date(v.startDate) <= new Date(req.to))
       })
 
       for (const activity of rawActivities) {

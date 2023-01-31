@@ -1,7 +1,8 @@
 export default {
   type: "object",
   properties: {
-    from: { type: 'string' }
+    from: { type: 'string' },
+    to: { type: 'string' }
   },
-  required: ['from']
+  required: ['from', 'to']
 } as const;
