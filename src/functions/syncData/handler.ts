@@ -8,9 +8,11 @@ import * as _ from 'lodash';
 
 import schema from './schema';
 import { ResponseStatus } from 'src/enum';
+import { config } from 'src/config';
 
-const syncData: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (_event) => {
+const syncData: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (event) => {
 
+  const req = event.body;
 
   try {
     // fetch all id from dynamoDB
@@ -43,6 +45,15 @@ const syncData: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (_even
         const res = await stravaAPICaller.refreshAccessToken(data.contents.refreshToken);
         data.contents.accessToken = res.accessToken;
         data.contents.expiresAt = res.expiresAt;
+      }
+
+      // hard reset logic, just only for admin
+      if (req.isHardSync) {
+        const [id, _token] = event.headers['AuthorizationToken'].split(' ')[1].split('.');
+        event.headers
+        if (id == config.strava.adminId) {
+          data.lastFetch = '';
+        }
       }
 
       //fetch new activities from Strava API

@@ -16,6 +16,7 @@ export const config = {
     strava: {
         host: 'https://www.strava.com/api/v3',
         clientId: process.env.CLIENT_ID,
-        clientSecret: process.env.CLIENT_SECRET
+        clientSecret: process.env.CLIENT_SECRET,
+        adminId: process.env.ADMIN_ID
     }
 };
