@@ -1,10 +1,9 @@
-
 name: Deploy Serverless API
 
 on:
   push:
-    branches: [ "main" ]
-    
+    branches: ["main"]
+
 permissions:
   contents: read
 
@@ -13,34 +12,32 @@ jobs:
     name: Deploy Serverless API
     runs-on: ubuntu-latest
     environment: production
-    
+
     steps:
-    - name: Checkout
-      uses: actions/checkout@v3
-    - name: install-libraries
-      uses: actions/setup-node@v3
-      with:
-        node-version: 14.x
-    - name: npm 7
-      run: npm i -g npm@7 --registry=https://registry.npmjs.org
-      
-    - name: Configure AWS credentials
-      uses: aws-actions/configure-aws-credentials@v1
-      with:
-        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        aws-region: ap-northeast-1
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: install-libraries
+        uses: actions/setup-node@v3
+        with:
+          node-version: 14.x
+      - name: npm 7
+        run: npm i -g npm@7 --registry=https://registry.npmjs.org
+      - name: aws-cli
+        run: npm i -g aws-cli
 
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ap-northeast-1
 
-    - name: debug 
-      run: 
-        ls
-        
-    - name: install 
-      run: 
-        npm install
-        
-    - name: deploy 
-      id: deploy-api
-      run: 
-        npm run deploy
+      - name: download env file
+        run: aws s3 cp s3://toughguys-configs/env-api.ts env.ts
+
+      - name: install
+        run: npm install
+
+      - name: deploy
+        id: deploy-api
+        run: npm run deploy
