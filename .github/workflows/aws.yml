@@ -11,13 +11,17 @@ permissions:
 jobs:
   deploy:
     name: Deploy Serverless API
-    runs-on: amaysim/serverless
-    environment: production
-
+    runs-on: ubuntu-latest
     steps:
     - name: Checkout
       uses: actions/checkout@v3
-
+    - name: install-libraries
+      uses: actions/setup-node@v3
+      with:
+        node-version: 14.x
+    - name: npm 7
+      run: npm i -g npm@7 --registry=https://registry.npmjs.org
+      
     - name: Configure AWS credentials
       uses: aws-actions/configure-aws-credentials@v1
       with:
@@ -28,4 +32,4 @@ jobs:
     - name: deploy 
       id: deploy-api
       run: 
-        yarn run deploy
+        npm run deploy
