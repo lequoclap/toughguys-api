@@ -12,6 +12,8 @@ jobs:
   deploy:
     name: Deploy Serverless API
     runs-on: ubuntu-latest
+    environment: production
+    
     steps:
     - name: Checkout
       uses: actions/checkout@v3
