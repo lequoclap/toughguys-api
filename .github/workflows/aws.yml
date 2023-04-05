@@ -31,6 +31,15 @@ jobs:
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         aws-region: ap-northeast-1
 
+
+    - name: debug 
+      run: 
+        ls
+        
+    - name: install 
+      run: 
+        npm install
+        
     - name: deploy 
       id: deploy-api
       run: 
