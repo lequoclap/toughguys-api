@@ -49,7 +49,7 @@ const syncData: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (event
 
       // hard reset logic, just only for admin
       if (req.isHardSync) {
-        const [id, _token] = event.headers['AuthorizationToken'].split(' ')[1].split('.');
+        const [id, _token] = event.headers['Authorization'].split(' ')[1].split('.');
         event.headers
         if (id == config.strava.adminId) {
           data.lastFetch = '';
