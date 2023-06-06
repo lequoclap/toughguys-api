@@ -103,7 +103,9 @@ ex) Authorization: "1231231.97f5fb168437a0474f2ce777d3f0680f39043de6"
 
 ```
 ```
-request:{ }
+request:{
+  isHardSync: true
+}
 ```
 ```
 response: 
