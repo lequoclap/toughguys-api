@@ -55,23 +55,21 @@ const syncData: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (event
           data.lastFetch = '';
         }
       }
-
+      console.log('athlete:', data.contents.athlete.name)
       //fetch new activities from Strava API
       const newActivities = await stravaAPICaller.getAthleteActivities(
         data.contents.accessToken,
-        //fetch the activities for whole day ( from 00:00:00)
-        Math.floor((data.lastFetch ? Date.parse(data.lastFetch.substring(0, 10)) : 0) / 1000))
+        //fetch the activities for whole day ( from 00:00:00 JST)
+        Math.floor((data.lastFetch ? Date.parse(data.lastFetch.substring(0, 10)) - 9 * 360 * 10000 : 0) / 1000))
 
       //ignore duplicated item and merge with  existing activities
-      const activitieIds = activities.map(x => {
-        return x.id
-      })
+      const activityMap = new Map(activities.map(i => [i.id, i])); // convert current activities array to map
+
       for (const activity of newActivities) {
-        if (!activitieIds.includes(activity.id)) {
-          activities.push(activity)
-        }
+        activityMap.set(activity.id, activity)
       }
-      data.contents.athlete.activities = activities;
+      // convert map to array and assign back to Dynamo content
+      data.contents.athlete.activities = [...activityMap.values()];
 
       // update back to DynamoDB
       await createOrUpdateStravaData(data.id, data.contents, new Date().toLocaleString());

@@ -147,7 +147,8 @@ export class StravaAPICaller {
                 console.log(`Error! HTTP Status: ${status} ${statusText}`);
             }
         }
-        console.log(activities.length)
+
+        console.log('number of activities: ', activities.length)
         return activities;
     }
 
