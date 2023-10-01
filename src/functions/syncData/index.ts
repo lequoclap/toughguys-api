@@ -20,5 +20,5 @@ export default {
       }
     },
   ],
-  timeout: 150 // 2.5minutes
+  timeout: 300 // 5minutes
 };
