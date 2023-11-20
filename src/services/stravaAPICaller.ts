@@ -114,7 +114,7 @@ export class StravaAPICaller {
         let loopFlg = true;
         let page = 1
 
-        while (page < 5 && loopFlg) {
+        while (page < 20 && loopFlg) {
 
             const url = config.strava.host + '/athlete/activities'
                 + '?per_page=' + perPage
